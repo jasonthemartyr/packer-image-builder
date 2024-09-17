@@ -1,0 +1,29 @@
+name: Manual AWS image builds
+on:
+  workflow_dispatch:
+    inputs:
+      packerVarsFile:
+        description: Which Packer file vars to build with
+        required: true
+        type: choice
+        options:
+          - aws-al2023-incremental.pkrvars.hcl
+          - aws-al2023.pkrvars.hcl
+jobs:
+  aws-manual:
+    runs-on: ubuntu-latest #or swap for self-hosted runner
+    container:
+      image: <YOUR_PACKER_CONTAINER>
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+      - uses: actions/checkout@v4
+      - name: Packer Build
+        run: |
+            ./build.sh aws ${{ github.event.inputs.packerVarsFile }}
+
+
+
+
+      

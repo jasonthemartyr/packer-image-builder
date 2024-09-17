@@ -1,0 +1,21 @@
+name: Manual Azure image builds
+on:
+  workflow_dispatch:
+    inputs:
+      packerVarsFile:
+        description: Which Packer file vars to build with
+        required: true
+        type: choice
+        options:
+          - azure2204-incremental.pkrvars.hcl
+          - azure2204.pkrvars.hcl
+jobs:
+  azure-manual:
+    runs-on: ubuntu-latest #or swap for self-hosted runner
+    container:
+      image: <YOUR_PACKER_CONTAINER>
+    steps:
+      - uses: actions/checkout@v4
+      - name: Packer Build
+        run: |
+            ./build.sh azure ${{ github.event.inputs.packerVarsFile }}

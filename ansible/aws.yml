@@ -1,0 +1,24 @@
+---
+- name: AWS image
+  hosts: all
+  become: true
+
+  pre_tasks:
+    - name: Update all packages
+      ansible.builtin.dnf:
+        state: latest
+        update_only: true
+
+  tasks:
+    - name: Install required packages
+      ansible.builtin.dnf:
+        name:
+          - git
+          - jq
+          - python3-pip
+          - libicu
+          - unzip
+          - wget
+          - tar
+          - gzip
+        state: latest

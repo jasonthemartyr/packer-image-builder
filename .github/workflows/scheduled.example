@@ -1,0 +1,28 @@
+name: Scheduled image builds
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 5 * * 1"
+jobs:
+  scheduled-azure-build:
+    runs-on: ubuntu-latest #or swap for self-hosted runner
+    container:
+      image: <YOUR_PACKER_CONTAINER>
+    steps:
+      - uses: actions/checkout@v4
+      - name: Packer Build
+        run: |
+            ./build.sh azure azure2204.pkrvars.hcl
+  scheduled-aws-build:
+    runs-on: ubuntu-latest #or swap for self-hosted runner
+    container:
+      image: <YOUR_PACKER_CONTAINER>
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+      - uses: actions/checkout@v4
+      - name: Packer Build
+        run: |
+            ./build.sh azure aws-al2023.pkrvars.hcl
+            

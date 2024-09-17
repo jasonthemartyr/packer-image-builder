@@ -1,0 +1,50 @@
+---
+- name: Setup Azure Ubuntu VM with basic packages
+  hosts: all
+  become: true
+
+  pre_tasks:
+    - name: Update apt cache
+      block:
+        - ansible.builtin.apt:
+            update_cache: true
+            upgrade: full
+            autoremove: true
+            force_apt_get: true
+            
+  tasks:
+    - name: Set up Azure CLI
+      block:
+        - ansible.builtin.apt:
+            name:
+              - gnupg
+              - ca-certificates
+            state: latest
+        - ansible.builtin.apt_key:
+            url: https://packages.microsoft.com/keys/microsoft.asc
+        - ansible.builtin.apt_repository:
+            filename: azure-cli
+            repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ {{ ansible_distribution_release }} main
+        - ansible.builtin.apt_repository:
+            filename: azure-prod
+            repo: deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-{{ ansible_distribution_release }}-prod {{ ansible_distribution_release }} main
+
+    - name: Install additional packages
+      ansible.builtin.apt:
+        name:
+          - git
+          - nfs-common
+          - autofs
+          - azure-cli
+          - jq
+          - azure-functions-core-tools-3
+          - cloud-init
+          - isc-dhcp-client
+          - openssh-server
+          - openssl
+          - passwd
+          - util-linux
+          - python3
+          - python3-pip
+        state: latest
+

@@ -12,7 +12,7 @@ Set your input params in a `*.pkvars.hcl` and pass the provider and file name to
 ./build.sh aws aws-al2023.pkrvars.hcl
 ```
 
-The conditional in `build.sh` is only needed if auth is not setup for all cloud providers. If your Packer container/VM is authenticated to AWS and Azure you can initialize both plugins:
+The conditional in `build.sh` is only needed if auth is not setup for all cloud providers. If your Packer container/VM is authenticated to AWS and Azure you can initialize both plugins and move each "source" file into the main directory:
 
 ```bash
 if [ "$cloud_provider" = "aws" ]; then
